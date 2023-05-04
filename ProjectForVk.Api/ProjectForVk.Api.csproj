@@ -15,4 +15,8 @@
       <Folder Include="Controllers" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ProjectForVk.Infrastructure\ProjectForVk.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
