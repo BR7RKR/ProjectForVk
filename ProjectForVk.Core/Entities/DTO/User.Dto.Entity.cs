@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using ProjectForVk.Core.Entities.DB;
 
-namespace ProjectForVk.Core.Entities.DB;
+namespace ProjectForVk.Core.Entities.DTO;
 
-public class UserEntity
+[Serializable]
+public class UserDtoEntity
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public required int Id { get; set; }
     
     public required string Login { get; set; }
@@ -19,13 +18,7 @@ public class UserEntity
     
     [JsonPropertyName("user_group_id")]
     public int UserGroupId { get; set; }
-    
-    [ForeignKey("UserGroupId")]
-    public UserGroupEntity UserGroup { get; set; }
-    
+
     [JsonPropertyName("user_state_id")]
     public int UserStateId { get; set; }
-    
-    [ForeignKey("UserStateId")]
-    public UserStateEntity UserState { get; set; }
 }

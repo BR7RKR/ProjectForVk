@@ -1,12 +1,12 @@
-﻿using System.Globalization;
-using ProjectForVk.Core.Entities.DB;
+﻿using ProjectForVk.Core.Entities.DB;
+using ProjectForVk.Core.Entities.DTO;
 
 namespace ProjectForVk.Application.Services;
 
 public interface IUserService
 {
-    public Task AddUserAsync(UserEntity userEntity);
-    public Task BlockUserAsync(string id);
-    public Task<UserEntity> GetUserAsync(string id);
-    public Task<IEnumerable<UserEntity>> GetUsersAsync(IEnumerable<string> ids);
+    public Task AddUserAsync(UserDtoEntity userDto);
+    public Task BlockUserAsync(int id);
+    public Task<UserEntity> GetUserAsync(int id);
+    public Task<IEnumerable<UserEntity>> GetUsersAsync();
 }
