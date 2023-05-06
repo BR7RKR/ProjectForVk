@@ -10,6 +10,8 @@ namespace ProjectForVk.Infrastructure.Services;
 internal sealed class UserService : IUserService
 {
     private readonly ApplicationContext _context;
+
+    private const int TIME_TO_ADD = 5000;
     public UserService(ApplicationContext context)
     {
         _context = context;
@@ -28,6 +30,10 @@ internal sealed class UserService : IUserService
 
         await _context.Users.AddAsync(userEntity);
         await _context.SaveChangesAsync();
+        
+        await Task.Delay(TIME_TO_ADD);
+
+        await ActivateUserAsync(userEntity);
     }
 
     public async Task BlockUserAsync(int id)
@@ -78,6 +84,21 @@ internal sealed class UserService : IUserService
         }
         
         return users;
+    }
+    
+    private async Task ActivateUserAsync(UserEntity userEntity)
+    {
+        var activeState = await _context.UserStates.FirstOrDefaultAsync(s => s.Code == StateCodeType.Active);
+
+        if (activeState is null)
+        {
+            throw new Exception("There is no state called 'Active'");
+        }
+
+        userEntity.UserStateId = activeState.Id;
+        
+        _context.Users.Update(userEntity);
+        await _context.SaveChangesAsync();
     }
     
     private async Task<UserEntity> CreateUserEntityFromDto(UserDtoEntity userDto)
