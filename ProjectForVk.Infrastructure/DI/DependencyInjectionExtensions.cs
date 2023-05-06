@@ -11,11 +11,8 @@ public static class DependencyInjectionExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        // services.AddDbContext<ApplicationContext>(options => 
-        //     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-
-        services.AddDbContext<ApplicationContext>(options =>
-            options.UseInMemoryDatabase("test"));
+        services.AddDbContext<ApplicationContext>(options => 
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IGroupService, GroupService>();

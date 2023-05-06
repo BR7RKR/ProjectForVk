@@ -3,6 +3,9 @@ using ProjectForVk.Application.Services;
 using ProjectForVk.Core.Entities.DB;
 using ProjectForVk.Core.Entities.DTO;
 using ProjectForVk.Core.Entities.Types;
+using ProjectForVk.Core.Exceptions.Group;
+using ProjectForVk.Core.Exceptions.State;
+using ProjectForVk.Core.Exceptions.User;
 using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
@@ -12,6 +15,7 @@ internal sealed class UserService : IUserService
     private readonly ApplicationContext _context;
 
     private const int TIME_TO_ADD = 5000;
+    
     public UserService(ApplicationContext context)
     {
         _context = context;
@@ -23,7 +27,7 @@ internal sealed class UserService : IUserService
 
         if (userWithSameId is not null)
         {
-            throw new Exception("User with the same id already exists");
+            throw new UserAlreadyExistsException(userDto.Id);
         }
 
         var userEntity = await CreateUserEntityFromDto(userDto);
@@ -42,19 +46,19 @@ internal sealed class UserService : IUserService
 
         if (user is null)
         {
-            throw new Exception($"No user with id :{id}");
+            throw new UserNotFoundException(id);
         }
 
         if (user.UserState.Code == StateCodeType.Blocked)
         {
-            throw new Exception("User is already blocked");
+            throw new UserAlreadyBlockedException(id);
         }
 
         var blockedState = await _context.UserStates.FirstOrDefaultAsync(u => u.Code == StateCodeType.Blocked);
 
         if (blockedState is null)
         {
-            throw new Exception($"No state with code 'Blocked'");
+            throw new StateNotFoundException(StateCodeType.Blocked);
         }
 
         user.UserStateId = blockedState.Id;
@@ -68,7 +72,7 @@ internal sealed class UserService : IUserService
 
         if (user is null)
         {
-            throw new Exception($"No user with id :{id}");
+            throw new UserNotFoundException(id);
         }
 
         return user;
@@ -80,7 +84,7 @@ internal sealed class UserService : IUserService
 
         if (users.Count == 0)
         {
-            throw new Exception("No users in db");
+            throw new UsersNotFoundException();
         }
         
         return users;
@@ -92,7 +96,7 @@ internal sealed class UserService : IUserService
 
         if (activeState is null)
         {
-            throw new Exception("There is no state called 'Active'");
+            throw new StateNotFoundException(StateCodeType.Active);
         }
 
         userEntity.UserStateId = activeState.Id;
@@ -117,12 +121,12 @@ internal sealed class UserService : IUserService
 
         if (existingState is null)
         {
-            throw new Exception($"No state with id: {userEntity.UserStateId}");
+            throw new StateNotFoundException(userEntity.UserStateId);
         }
 
         if (existingGroup is null)
         {
-            throw new Exception($"No group with id: {userEntity.UserGroupId}");
+            throw new GroupNotFoundException(userEntity.UserGroupId);
         }
         
         if (existingGroup.Code == GroupCodeType.Admin)
@@ -140,7 +144,7 @@ internal sealed class UserService : IUserService
 
         if (admin is not null)
         {
-            throw new Exception("Admin already Exists");
+            throw new AdminAlreadyExistsException(admin.Id);
         }
     }
 }

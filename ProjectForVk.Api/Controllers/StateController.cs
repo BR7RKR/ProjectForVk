@@ -6,7 +6,7 @@ namespace ProjectForVk.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class StateController : Controller
+public sealed class StateController : Controller
 {
     private readonly IStateService _stateService;
 
@@ -25,7 +25,7 @@ public class StateController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(new { error = e.Message});
         }
     }
 }

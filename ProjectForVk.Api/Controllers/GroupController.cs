@@ -6,7 +6,7 @@ namespace ProjectForVk.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class GroupController : Controller
+public sealed class GroupController : Controller
 {
     private readonly IGroupService _groupService;
 
@@ -25,7 +25,7 @@ public class GroupController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(new { error = e.Message});
         }
     }
 }

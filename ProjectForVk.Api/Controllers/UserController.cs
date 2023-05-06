@@ -6,7 +6,7 @@ namespace ProjectForVk.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class UserController : Controller
+public sealed class UserController : Controller
 {
     private readonly IUserService _userService;
 
@@ -15,21 +15,21 @@ public class UserController : Controller
         _userService = userService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUser(int id)
+    [HttpPost] // вообще я бы это сделал обычным гет запросом, но в задании было четко сказано делать все запросы через json, поэтому пришлось такое написать
+    public async Task<IActionResult> GetUser([FromBody] UserRequestDtoEntity userRequest)
     {
         try
         {
-            var user = await _userService.GetUserAsync(id);
+            var user = await _userService.GetUserAsync(userRequest.Id);
             return new ObjectResult(user);
         }
         catch (Exception e)
         {
-            return NotFound(e.Message);
+            return NotFound(new { error = e.Message});
         }
     }
     
-    [HttpGet]
+    [HttpGet] // пока я не реализовал пагинацию тут особо нечего запрашивать через JSON, поэтому оставляю простой гет запрос
     public async Task<IActionResult> GetUsers()
     {
         try
@@ -39,8 +39,7 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return NotFound(e.Message);
+            return NotFound(new { error = e.Message});
         }
     }
     
@@ -54,21 +53,21 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(new { error = e.Message});
         }
     }
 
     [HttpPost]
-    public async Task<IActionResult> BlockUser([FromBody] int id)
+    public async Task<IActionResult> BlockUser([FromBody] UserRequestDtoEntity userRequest)
     {
         try
         {
-            await _userService.BlockUserAsync(id);
+            await _userService.BlockUserAsync(userRequest.Id);
             return Ok();
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(new { error = e.Message});
         }
     }
 }

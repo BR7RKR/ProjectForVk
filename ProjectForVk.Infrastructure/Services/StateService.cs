@@ -1,5 +1,6 @@
 ﻿using ProjectForVk.Application.Services;
 using ProjectForVk.Core.Entities.DB;
+using ProjectForVk.Core.Exceptions.State;
 using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
@@ -19,7 +20,7 @@ internal sealed class StateService : IStateService
 
         if (groupWithSameId is not null)
         {
-            throw new Exception("State with the same id already exists");
+            throw new StateAlreadyExistsException(stateEntity.Id);
         }
 
         await _context.UserStates.AddAsync(stateEntity);

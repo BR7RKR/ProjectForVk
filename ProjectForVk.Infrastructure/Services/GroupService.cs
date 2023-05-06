@@ -1,5 +1,6 @@
 ﻿using ProjectForVk.Application.Services;
 using ProjectForVk.Core.Entities.DB;
+using ProjectForVk.Core.Exceptions.Group;
 using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
@@ -19,7 +20,7 @@ internal sealed class GroupService : IGroupService
 
         if (groupWithSameId is not null)
         {
-            throw new Exception("Group with the same id already exists");
+            throw new GroupAlreadyExistsException(groupEntity.Id);
         }
 
         await _context.UserGroups.AddAsync(groupEntity);

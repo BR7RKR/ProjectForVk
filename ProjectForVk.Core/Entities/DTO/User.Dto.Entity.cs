@@ -5,7 +5,7 @@ using ProjectForVk.Core.Entities.DB;
 namespace ProjectForVk.Core.Entities.DTO;
 
 [Serializable]
-public class UserDtoEntity
+public sealed class UserDtoEntity
 {
     public required int Id { get; set; }
     
