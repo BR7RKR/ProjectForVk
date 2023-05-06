@@ -11,8 +11,8 @@ public class UserStateEntity
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public required int Id { get; set; }
     
-    [RegularExpression(@"^(Active|Blocked)$")]
-    public required string Code { get; set; }
+    //[RegularExpression(@"^(Active|Blocked)$")]
+    public required StateCodeType Code { get; set; }
     
     public required string Description { get; set; }
 }

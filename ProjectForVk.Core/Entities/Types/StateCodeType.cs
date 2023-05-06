@@ -2,6 +2,6 @@
 
 public enum StateCodeType
 {
-    Active,
-    Blocked
+    Blocked,
+    Active
 }

@@ -25,7 +25,7 @@ public class StateController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

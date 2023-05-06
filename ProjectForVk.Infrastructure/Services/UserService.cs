@@ -2,6 +2,7 @@
 using ProjectForVk.Application.Services;
 using ProjectForVk.Core.Entities.DB;
 using ProjectForVk.Core.Entities.DTO;
+using ProjectForVk.Core.Entities.Types;
 using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
@@ -9,7 +10,6 @@ namespace ProjectForVk.Infrastructure.Services;
 internal sealed class UserService : IUserService
 {
     private readonly ApplicationContext _context;
-
     public UserService(ApplicationContext context)
     {
         _context = context;
@@ -32,14 +32,26 @@ internal sealed class UserService : IUserService
 
     public async Task BlockUserAsync(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.Users.Include(x => x.UserState).FirstOrDefaultAsync(x => x.Id == id);
 
         if (user is null)
         {
-            throw new Exception($"No user with guid :{id}");
+            throw new Exception($"No user with id :{id}");
         }
 
-        user.UserState.Code = "Blocked";
+        if (user.UserState.Code == StateCodeType.Blocked)
+        {
+            throw new Exception("User is already blocked");
+        }
+
+        var blockedState = await _context.UserStates.FirstOrDefaultAsync(u => u.Code == StateCodeType.Blocked);
+
+        if (blockedState is null)
+        {
+            throw new Exception($"No state with code 'Blocked'");
+        }
+
+        user.UserStateId = blockedState.Id;
         
         await _context.SaveChangesAsync();
     }
@@ -81,9 +93,33 @@ internal sealed class UserService : IUserService
         };
         var existingState = await _context.UserStates.FindAsync(userEntity.UserStateId);
         var existingGroup = await _context.UserGroups.FindAsync(userEntity.UserGroupId);
+
+        if (existingState is null)
+        {
+            throw new Exception($"No state with id: {userEntity.UserStateId}");
+        }
+
+        if (existingGroup is null)
+        {
+            throw new Exception($"No group with id: {userEntity.UserGroupId}");
+        }
         
-        //TODO: ошибку кидать
+        if (existingGroup.Code == GroupCodeType.Admin)
+        {
+            await ValidateAdminCreationAsync();
+        }
         
         return userEntity;
+    }
+
+    private async Task ValidateAdminCreationAsync()
+    {
+        var admin = await _context.Users.Include(u => u.UserGroup)
+            .FirstOrDefaultAsync(u => u.UserGroup.Code == GroupCodeType.Admin);
+
+        if (admin is not null)
+        {
+            throw new Exception("Admin already Exists");
+        }
     }
 }

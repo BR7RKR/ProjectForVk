@@ -11,8 +11,8 @@ public class UserGroupEntity
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public required int Id { get; set; }
     
-    [RegularExpression(@"^(Admin|User)$")]
-    public required string Code { get; set; }
+    //[RegularExpression(@"^(Admin|User)$")]
+    public required GroupCodeType Code { get; set; }
     
     public required string Description { get; set; }
 }

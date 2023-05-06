@@ -25,7 +25,7 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            return NotFound();
+            return NotFound(e.Message);
         }
     }
     
@@ -40,7 +40,7 @@ public class UserController : Controller
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return NotFound();
+            return NotFound(e.Message);
         }
     }
     
@@ -54,7 +54,7 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -68,7 +68,7 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

@@ -2,6 +2,6 @@
 
 public enum GroupCodeType
 {
-    Admin,
-    User
+    User,
+    Admin
 }

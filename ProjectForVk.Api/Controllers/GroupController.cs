@@ -25,7 +25,7 @@ public class GroupController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

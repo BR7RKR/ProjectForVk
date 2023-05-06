@@ -14,6 +14,6 @@ internal class ApplicationContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()
-            .HasIndex(u => u.Login).IsUnique();
+            .HasIndex(u => u.Login).IsUnique().HasDatabaseName("login");
     }
 }
