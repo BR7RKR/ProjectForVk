@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace ProjectForVk.Core.Entities.DB;
 
+[Table("user")]
 public class UserEntity
 {
     [Key]

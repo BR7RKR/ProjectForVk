@@ -18,7 +18,8 @@ public static class DependencyInjectionExtensions
             options.UseInMemoryDatabase("test"));
 
         services.AddScoped<IUserService, UserService>();
-
+        services.AddScoped<IGroupService, GroupService>();
+        services.AddScoped<IStateService, StateService>();
 
         return services;
     }

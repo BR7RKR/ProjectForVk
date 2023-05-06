@@ -2,7 +2,6 @@
 using ProjectForVk.Application.Services;
 using ProjectForVk.Core.Entities.DB;
 using ProjectForVk.Core.Entities.DTO;
-using ProjectForVk.Core.Entities.Types;
 using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
@@ -18,7 +17,6 @@ internal sealed class UserService : IUserService
     
     public async Task AddUserAsync(UserDtoEntity userDto)
     {
-
         var userWithSameId = await _context.Users.FindAsync(userDto.Id);
 
         if (userWithSameId is not null)
@@ -48,7 +46,7 @@ internal sealed class UserService : IUserService
 
     public async Task<UserEntity> GetUserAsync(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.Users.Include(x => x.UserGroup).Include(x => x.UserState).FirstOrDefaultAsync(x => x.Id == id);
 
         if (user is null)
         {
@@ -60,7 +58,7 @@ internal sealed class UserService : IUserService
 
     public async Task<IEnumerable<UserEntity>> GetUsersAsync()
     {
-        var users = await _context.Users.ToListAsync();
+        var users = await _context.Users.Include(x => x.UserGroup).Include(x => x.UserState).ToListAsync();
 
         if (users.Count == 0)
         {
@@ -83,9 +81,9 @@ internal sealed class UserService : IUserService
         };
         var existingState = await _context.UserStates.FindAsync(userEntity.UserStateId);
         var existingGroup = await _context.UserGroups.FindAsync(userEntity.UserGroupId);
-
-        userEntity.UserState = existingState;
-        userEntity.UserGroup = existingGroup;
+        
+        //TODO: ошибку кидать
+        
         return userEntity;
     }
 }

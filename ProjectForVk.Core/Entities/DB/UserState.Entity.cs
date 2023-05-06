@@ -4,6 +4,7 @@ using ProjectForVk.Core.Entities.Types;
 
 namespace ProjectForVk.Core.Entities.DB;
 
+[Table("user_state")]
 public class UserStateEntity
 {
     [Key]

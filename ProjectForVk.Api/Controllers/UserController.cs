@@ -54,7 +54,6 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
             return BadRequest();
         }
     }
@@ -69,7 +68,6 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
             return BadRequest();
         }
     }
