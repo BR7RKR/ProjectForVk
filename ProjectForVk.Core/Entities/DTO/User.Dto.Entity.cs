@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-using ProjectForVk.Core.Entities.DB;
+﻿using System.Text.Json.Serialization;
 
 namespace ProjectForVk.Core.Entities.DTO;
 
