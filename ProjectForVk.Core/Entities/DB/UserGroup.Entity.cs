@@ -17,4 +17,29 @@ public sealed class UserGroupEntity
     
     [Column("description")]
     public required string Description { get; set; }
+    
+    public static bool operator ==(UserGroupEntity a, UserGroupEntity b)
+    {
+        return a?.Equals(b) ?? ReferenceEquals(b, null);
+    }
+    
+    public static bool operator !=(UserGroupEntity a, UserGroupEntity b)
+    {
+        return !(a == b);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is UserGroupEntity other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, (int) Code, Description);
+    }
+    
+    private bool Equals(UserGroupEntity other)
+    {
+        return Id == other.Id && Code == other.Code && Description == other.Description;
+    }
 }
