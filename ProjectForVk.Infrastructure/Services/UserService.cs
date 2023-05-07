@@ -51,7 +51,7 @@ internal sealed class UserService : IUserService
 
         if (user.UserState.Code == StateCodeType.Blocked)
         {
-            throw new UserAlreadyBlockedException(id);
+            throw new UserBlockedException(id);
         }
 
         var blockedState = await _context.UserStates.FirstOrDefaultAsync(u => u.Code == StateCodeType.Blocked);
@@ -68,7 +68,10 @@ internal sealed class UserService : IUserService
 
     public async Task<UserEntity> GetUserAsync(int id)
     {
-        var user = await _context.Users.Include(x => x.UserGroup).Include(x => x.UserState).FirstOrDefaultAsync(x => x.Id == id);
+        var user = await _context.Users
+            .Include(x => x.UserGroup)
+            .Include(x => x.UserState)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (user is null)
         {
@@ -94,6 +97,31 @@ internal sealed class UserService : IUserService
         }
         
         return users;
+    }
+    
+    public async Task<UserEntity> Authenticate(string login, string password)
+    {
+        var user = await _context.Users
+            .Include(x => x.UserGroup)
+            .Include(x => x.UserState)
+            .FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
+
+        if (user is null)
+        {
+            throw new UserNotFoundException(login);
+        }
+
+        if (user.UserState.Code == StateCodeType.Blocked)
+        {
+            throw new UserBlockedException(user.Id);
+        }
+
+        if (user.UserGroup.Code != GroupCodeType.Admin)
+        {
+            throw new NotEnoughPermissionsException(user.Id);
+        }
+        
+        return user;
     }
     
     private async Task ActivateUserAsync(UserEntity userEntity)
