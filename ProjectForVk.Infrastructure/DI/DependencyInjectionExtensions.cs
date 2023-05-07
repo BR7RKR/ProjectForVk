@@ -13,7 +13,7 @@ public static class DependencyInjectionExtensions
     {
         services.AddDbContext<ApplicationContext>(options => 
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-
+        
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IStateService, StateService>();

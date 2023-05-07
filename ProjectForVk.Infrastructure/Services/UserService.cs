@@ -78,10 +78,16 @@ internal sealed class UserService : IUserService
         return user;
     }
 
-    public async Task<IEnumerable<UserEntity>> GetUsersAsync()
+    public async Task<IEnumerable<UserEntity>> GetUsersAsync(PaginationFilterDto filter)
     {
-        var users = await _context.Users.Include(x => x.UserGroup).Include(x => x.UserState).ToListAsync();
-
+        var validFilter = new PaginationFilterDto(filter.PageNumber, filter.PageSize);
+        var users = await _context.Users
+            .Include(x => x.UserGroup)
+            .Include(x => x.UserState)
+            .Skip((validFilter.PageNumber-1) * validFilter.PageSize)
+            .Take(validFilter.PageSize)
+            .ToListAsync();
+        
         if (users.Count == 0)
         {
             throw new UsersNotFoundException();
@@ -116,6 +122,7 @@ internal sealed class UserService : IUserService
             UserGroupId = userDto.UserGroupId,
             UserStateId = userDto.UserStateId
         };
+        
         var existingState = await _context.UserStates.FindAsync(userEntity.UserStateId);
         var existingGroup = await _context.UserGroups.FindAsync(userEntity.UserGroupId);
 

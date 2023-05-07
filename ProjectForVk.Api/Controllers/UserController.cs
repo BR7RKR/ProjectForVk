@@ -29,12 +29,12 @@ public sealed class UserController : Controller
         }
     }
     
-    [HttpGet] // пока я не реализовал пагинацию тут особо нечего запрашивать через JSON, поэтому оставляю простой гет запрос
-    public async Task<IActionResult> GetUsers()
+    [HttpPost] // вообще я бы это сделал обычным гет запросом, но в задании было четко сказано делать все запросы через json, поэтому пришлось такое написать
+    public async Task<IActionResult> GetUsers([FromBody] PaginationFilterDto filter)
     {
         try
         {
-            var user = await _userService.GetUsersAsync();
+            var user = await _userService.GetUsersAsync(filter);
             return new ObjectResult(user);
         }
         catch (Exception e)
