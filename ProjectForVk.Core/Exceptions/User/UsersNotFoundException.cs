@@ -2,5 +2,5 @@
 
 public sealed class UsersNotFoundException : Exception
 {
-    public UsersNotFoundException() : base("No users in database"){}
+    public UsersNotFoundException() : base($"No users found in the database"){}
 }
