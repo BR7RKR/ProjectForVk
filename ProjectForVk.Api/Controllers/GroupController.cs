@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjectForVk.Api.Authorization;
 using ProjectForVk.Application.Services;
 using ProjectForVk.Core.Entities.DB;
 
 namespace ProjectForVk.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
 public sealed class GroupController : Controller

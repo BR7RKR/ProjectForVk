@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
+using ProjectForVk.Api.Authorization;
 using ProjectForVk.Infrastructure.Database.DateOnlySupport;
 using ProjectForVk.Infrastructure.DI;
 
@@ -41,5 +42,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<BasicAuthMiddleware>();
 
 app.Run();
