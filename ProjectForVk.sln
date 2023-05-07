@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectForVk.Api", "Project
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectForVk.Core", "ProjectForVk.Core\ProjectForVk.Core.csproj", "{BD920A98-E353-461A-919D-BC4C96B78B73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectForVk.Tests", "ProjectForVk.Tests\ProjectForVk.Tests.csproj", "{28954B06-8C93-49A7-93CA-A147B3694FDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{BD920A98-E353-461A-919D-BC4C96B78B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD920A98-E353-461A-919D-BC4C96B78B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD920A98-E353-461A-919D-BC4C96B78B73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28954B06-8C93-49A7-93CA-A147B3694FDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28954B06-8C93-49A7-93CA-A147B3694FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28954B06-8C93-49A7-93CA-A147B3694FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28954B06-8C93-49A7-93CA-A147B3694FDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
