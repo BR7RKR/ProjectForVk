@@ -192,7 +192,7 @@ public class UserServiceTests
         await context.Users.AddAsync(admin);
         await context.SaveChangesAsync();
 
-        var userEntity = await service.AuthenticateAsync(admin.Login, admin.Password);
+        var userEntity = await service.Authenticate(admin.Login, admin.Password);
         
         Assert.True(admin == userEntity);
     }
@@ -210,7 +210,7 @@ public class UserServiceTests
         await context.Users.AddAsync(admin);
         await context.SaveChangesAsync();
 
-        await Assert.ThrowsAsync<UserNotFoundException>(() => service.AuthenticateAsync("", admin.Password));
+        await Assert.ThrowsAsync<UserNotFoundException>(() => service.Authenticate("", admin.Password));
         
         var usersFromDb = await context.Users.ToListAsync();
         Assert.True(usersFromDb.Count == 1);
@@ -229,7 +229,7 @@ public class UserServiceTests
         await context.Users.AddAsync(admin);
         await context.SaveChangesAsync();
 
-        await Assert.ThrowsAsync<UserNotFoundException>(() => service.AuthenticateAsync(admin.Login, ""));
+        await Assert.ThrowsAsync<UserNotFoundException>(() => service.Authenticate(admin.Login, ""));
         
         var usersFromDb = await context.Users.ToListAsync();
         Assert.True(usersFromDb.Count == 1);
@@ -246,7 +246,7 @@ public class UserServiceTests
         await SetUpStates(context);
         var admin = DefaultUserEntity(userStateId: activeStateId, userGroupId: adminGroupId);
 
-        await Assert.ThrowsAsync<UserNotFoundException>(() => service.AuthenticateAsync(admin.Login, admin.Password));
+        await Assert.ThrowsAsync<UserNotFoundException>(() => service.Authenticate(admin.Login, admin.Password));
         
         var usersFromDb = await context.Users.ToListAsync();
         Assert.True(usersFromDb.Count == 0);
@@ -265,7 +265,7 @@ public class UserServiceTests
         await context.Users.AddAsync(admin);
         await context.SaveChangesAsync();
 
-        await Assert.ThrowsAsync<UserBlockedException>(() => service.AuthenticateAsync(admin.Login, admin.Password));
+        await Assert.ThrowsAsync<UserBlockedException>(() => service.Authenticate(admin.Login, admin.Password));
         
         var adminFromDb = await context.Users.FindAsync(admin.Id);
         Assert.NotNull(adminFromDb);
@@ -285,7 +285,7 @@ public class UserServiceTests
         await context.Users.AddAsync(admin);
         await context.SaveChangesAsync();
 
-        await Assert.ThrowsAsync<NotEnoughPermissionsException>(() => service.AuthenticateAsync(admin.Login, admin.Password));
+        await Assert.ThrowsAsync<NotEnoughPermissionsException>(() => service.Authenticate(admin.Login, admin.Password));
         
         var adminFromDb = await context.Users.FindAsync(admin.Id);
         Assert.NotNull(adminFromDb);

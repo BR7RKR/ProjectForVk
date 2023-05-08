@@ -101,7 +101,7 @@ internal sealed class UserService : IUserService
         return users;
     }
     
-    public async Task<UserEntity> AuthenticateAsync(string login, string password)
+    public async Task<UserEntity> Authenticate(string login, string password)
     {
         var user = await _context.Users
             .Include(u => u.UserGroup)

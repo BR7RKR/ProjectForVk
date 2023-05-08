@@ -20,8 +20,8 @@ public sealed class AuthorizeAttribute : Attribute, IAuthorizationFilter
             // not logged in - return 401 unauthorized
             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
 
-            // set 'WWW-AuthenticateAsync' header to trigger login popup in browsers
-            context.HttpContext.Response.Headers["WWW-AuthenticateAsync"] = "Basic realm=\"\", charset=\"UTF-8\"";
+            // set 'WWW-Authenticate' header to trigger login popup in browsers
+            context.HttpContext.Response.Headers["WWW-Authenticate"] = "Basic realm=\"\", charset=\"UTF-8\"";
         }
     }
 }
