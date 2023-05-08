@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using ProjectForVk.Core.Entities.DB;
 using ProjectForVk.Core.Entities.Types;
+using ProjectForVk.Core.Exceptions.Group;
 using ProjectForVk.Infrastructure.Database;
 using ProjectForVk.Infrastructure.Services;
 
@@ -14,25 +14,41 @@ public sealed class GroupServiceTests // Не совсем понимаю зач
     public GroupServiceTests()
     {
         _contextOptions = new DbContextOptionsBuilder<ApplicationContext>()
-            .UseInMemoryDatabase("test")
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
     }
 
     [Theory]
-    [InlineData(0, GroupCodeType.User)]
-    [InlineData(1, GroupCodeType.Admin)]
-    public async Task CreateGroupAsync_WithoutDuplicates_ShouldCreateGroup(int id,GroupCodeType codeType)
+    [InlineData(GroupCodeType.User)]
+    [InlineData(GroupCodeType.Admin)]
+    public async Task CreateGroupAsync_WithoutDuplicates_ShouldCreateGroup(GroupCodeType codeType)
     {
         var context = CreateContext();
-        var groupService = CreateGroupService(context);
-        var group = DefaultGroupEntity(id, codeType);
+        var service = CreateGroupService(context);
+        var group = DefaultGroupEntity(code: codeType);
 
-        await groupService.AddGroupAsync(group);
+        await service.AddGroupAsync(group);
 
         var groupFromDb = await context.UserGroups.FindAsync(group.Id);
         
         Assert.NotNull(groupFromDb);
         Assert.True(group == groupFromDb);
+    }
+    
+    [Fact]
+    public async Task CreateGroupAsync_WithDuplicates_ShouldThrowException()
+    {
+        var context = CreateContext();
+        var service = CreateGroupService(context);
+        var group = DefaultGroupEntity();
+        var groupDuplicate = DefaultGroupEntity();
+        await context.UserGroups.AddAsync(group);
+        await context.SaveChangesAsync();
+
+        await Assert.ThrowsAsync<GroupAlreadyExistsException>(() => service.AddGroupAsync(groupDuplicate));
+        
+        var groupsFromDb = await context.UserGroups.ToListAsync();
+        Assert.Single(groupsFromDb);
     }
     
     private ApplicationContext CreateContext()
