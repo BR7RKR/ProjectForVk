@@ -7,8 +7,8 @@ using ProjectForVk.Infrastructure.Services;
 
 namespace ProjectForVk.Tests;
 
-public sealed class GroupServiceTests // Не совсем понимаю зачем юнит тесты в приложении с таким функционалом.
-{                                     // Как по мне больше смысла бы имели интеграционные тесты.
+public sealed class GroupServiceTests
+{
     private readonly DbContextOptions<ApplicationContext> _contextOptions;
 
     public GroupServiceTests()

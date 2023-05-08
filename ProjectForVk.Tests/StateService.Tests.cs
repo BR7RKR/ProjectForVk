@@ -58,14 +58,14 @@ public class StateServiceTests
 
     private UserStateEntity DefaultStateEntity(int id = 0, StateCodeType code = StateCodeType.Blocked)
     {
-        var group = new UserStateEntity
+        var state = new UserStateEntity
         {
             Id = id,
             Code = code,
             Description = "empty"
         };
 
-        return group;
+        return state;
     }
     
     private StateService CreateStateService(ApplicationContext context)
