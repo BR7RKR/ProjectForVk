@@ -23,7 +23,7 @@ public sealed class BasicAuthMiddleware
             var username = credentials[0];
             var password = credentials[1];
             
-            context.Items["User"] = await userService.Authenticate(username, password);
+            context.Items["User"] = await userService.AuthenticateAsync(username, password);
         }
         catch
         {
