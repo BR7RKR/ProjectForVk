@@ -36,7 +36,7 @@ public sealed class GroupServiceTests
     }
     
     [Fact]
-    public async Task CreateGroupAsync_WithDuplicates_ShouldThrowException()
+    public async Task CreateGroupAsync_WithDuplicates_ShouldThrowGroupAlreadyExistsException()
     {
         var context = CreateContext();
         var service = CreateGroupService(context);

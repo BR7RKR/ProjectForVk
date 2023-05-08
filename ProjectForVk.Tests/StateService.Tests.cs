@@ -36,7 +36,7 @@ public class StateServiceTests
     }
     
     [Fact]
-    public async Task CreateStateAsync_WithDuplicates_ShouldThrowException()
+    public async Task CreateStateAsync_WithDuplicates_ShouldThrowStateAlreadyExistsException()
     {
         var context = CreateContext();
         var service = CreateStateService(context);
