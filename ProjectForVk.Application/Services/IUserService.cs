@@ -9,5 +9,5 @@ public interface IUserService
     public Task BlockUserAsync(int id);
     public Task<UserEntity> GetUserAsync(int id);
     public Task<IEnumerable<UserEntity>> GetUsersAsync(PaginationFilterDto filter);
-    public Task<UserEntity> Authenticate(string login, string password);
+    public Task<UserEntity> AuthenticateAsync(string login, string password);
 }

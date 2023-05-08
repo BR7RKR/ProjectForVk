@@ -42,7 +42,9 @@ internal sealed class UserService : IUserService
 
     public async Task BlockUserAsync(int id)
     {
-        var user = await _context.Users.Include(x => x.UserState).FirstOrDefaultAsync(x => x.Id == id);
+        var user = await _context.Users
+            .Include(u => u.UserState)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user is null)
         {
@@ -69,9 +71,9 @@ internal sealed class UserService : IUserService
     public async Task<UserEntity> GetUserAsync(int id)
     {
         var user = await _context.Users
-            .Include(x => x.UserGroup)
-            .Include(x => x.UserState)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .Include(u => u.UserGroup)
+            .Include(u => u.UserState)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user is null)
         {
@@ -85,8 +87,8 @@ internal sealed class UserService : IUserService
     {
         var validFilter = new PaginationFilterDto(filter.PageNumber, filter.PageSize);
         var users = await _context.Users
-            .Include(x => x.UserGroup)
-            .Include(x => x.UserState)
+            .Include(u => u.UserGroup)
+            .Include(u => u.UserState)
             .Skip((validFilter.PageNumber-1) * validFilter.PageSize)
             .Take(validFilter.PageSize)
             .ToListAsync();
@@ -99,11 +101,11 @@ internal sealed class UserService : IUserService
         return users;
     }
     
-    public async Task<UserEntity> Authenticate(string login, string password)
+    public async Task<UserEntity> AuthenticateAsync(string login, string password)
     {
         var user = await _context.Users
-            .Include(x => x.UserGroup)
-            .Include(x => x.UserState)
+            .Include(u => u.UserGroup)
+            .Include(u => u.UserState)
             .FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
 
         if (user is null)
