@@ -59,12 +59,12 @@ public sealed class UserController : Controller
         }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> BlockUser([FromBody] UserRequestDtoEntity userRequest)
+    [HttpDelete]
+    public async Task<IActionResult> BlockUser(int id)
     {
         try
         {
-            await _userService.BlockUserAsync(userRequest.Id);
+            await _userService.BlockUserAsync(id);
             return Ok();
         }
         catch (Exception e)
