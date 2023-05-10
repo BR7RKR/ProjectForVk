@@ -17,12 +17,12 @@ public sealed class UserController : Controller
         _userService = userService;
     }
 
-    [HttpPost] // вообще я бы это сделал обычным гет запросом, но в задании было четко сказано делать все запросы через json, поэтому пришлось такое написать
-    public async Task<IActionResult> GetUser([FromBody] UserRequestDtoEntity userRequest)
+    [HttpGet]
+    public async Task<IActionResult> GetUser(int id)
     {
         try
         {
-            var user = await _userService.GetUserAsync(userRequest.Id);
+            var user = await _userService.GetUserAsync(id);
             return new ObjectResult(user);
         }
         catch (Exception e)
@@ -31,8 +31,8 @@ public sealed class UserController : Controller
         }
     }
     
-    [HttpPost] // вообще я бы это сделал обычным гет запросом, но в задании было четко сказано делать все запросы через json, поэтому пришлось такое написать
-    public async Task<IActionResult> GetUsers([FromBody] PaginationFilterDto filter)
+    [HttpGet]
+    public async Task<IActionResult> GetUsers([FromQuery] PaginationFilterDto filter)
     {
         try
         {
