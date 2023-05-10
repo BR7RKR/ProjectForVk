@@ -8,6 +8,8 @@ public sealed class PaginationFilterDto
     private const int MIN_PAGE_NUMBER = 1;
     
     private const int MAX_PAGE_SIZE = 50;
+    
+    public PaginationFilterDto() {}
 
     public PaginationFilterDto(int pageNumber = MIN_PAGE_NUMBER, int pageSize = MAX_PAGE_SIZE)
     {
