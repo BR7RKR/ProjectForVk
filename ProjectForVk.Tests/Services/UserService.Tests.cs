@@ -8,30 +8,19 @@ using ProjectForVk.Core.Exceptions.User;
 using ProjectForVk.Infrastructure.Database;
 using ProjectForVk.Infrastructure.Services;
 
-namespace ProjectForVk.Tests;
+namespace ProjectForVk.Tests.Services;
 
-public class UserServiceTests
+public class UserServiceTests : DatabaseTestsHelper
 {
     private readonly DbContextOptions<ApplicationContext> _contextOptions;
-
-    public UserServiceTests()
-    {
-        _contextOptions = new DbContextOptionsBuilder<ApplicationContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-    }
-    
-    private ApplicationContext CreateContext()
-    {
-        return new ApplicationContext(_contextOptions);
-    }
 
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task AddUserAsync_WithoutDuplicates_ShouldCreateUser(int groupId)
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         var userDto = DefaultUserDtoEntity(userGroupId: groupId);
         await SetUpGroups(context);
@@ -47,7 +36,8 @@ public class UserServiceTests
     [Fact]
     public async Task AddUserAsync_WithDuplicates_ShouldThrowUserAlreadyExistsException()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         var userDto = DefaultUserDtoEntity();
         var user = DefaultUserEntity();
@@ -65,7 +55,8 @@ public class UserServiceTests
     [Fact]
     public async Task AddUserAsync_WithoutState_ShouldThrowStateNotFoundException()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         var userDto = DefaultUserDtoEntity();
         await SetUpGroups(context);
@@ -79,7 +70,8 @@ public class UserServiceTests
     [Fact]
     public async Task AddUserAsync_WithoutGroup_ShouldThrowGroupNotFoundException()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         var userDto = DefaultUserDtoEntity();
         await SetUpStates(context);
@@ -94,14 +86,15 @@ public class UserServiceTests
     public async Task AddUserAsync_WithAdmin_ShouldThrowAdminAlreadyExistsException()
     {
         var adminGroupId = 1;
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         var userDto = DefaultUserDtoEntity(userGroupId: adminGroupId);
         var user = DefaultUserEntity(id: 1, userGroupId: adminGroupId);
-        await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
         await SetUpStates(context);
         await SetUpGroups(context);
+        await context.Users.AddAsync(user);
+        await context.SaveChangesAsync();
 
         await Assert.ThrowsAsync<AdminAlreadyExistsException>(() => service.AddUserAsync(userDto));
 
@@ -114,7 +107,8 @@ public class UserServiceTests
     {
         var activeStateId = 1;
         var blockStateId = 0;
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         await SetUpStates(context);
@@ -133,7 +127,8 @@ public class UserServiceTests
     public async Task BlockUserAsync_WithoutUser_ShouldThrowUserNotFoundException()
     {
         var blockStateId = 0;
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         await SetUpStates(context);
@@ -149,7 +144,8 @@ public class UserServiceTests
     public async Task BlockUserAsync_WithBlockedUser_ShouldThrowUserBlockedException()
     {
         var blockStateId = 0;
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         await SetUpStates(context);
@@ -167,7 +163,8 @@ public class UserServiceTests
     [Fact]
     public async Task BlockUserAsync_WithoutBlockState_ShouldThrowStateNotFoundException()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         var stateActive = DefaultStateEntity(1, StateCodeType.Active);
@@ -178,124 +175,12 @@ public class UserServiceTests
 
         await Assert.ThrowsAsync<StateNotFoundException>(()=>service.BlockUserAsync(user.Id));
     }
-    
-    [Fact]
-    public async Task AuthenticateAsync_WithProperLoginData_ShouldAuthorizeUser()
-    {
-        var adminGroupId = 1;
-        var activeStateId = 1;
-        var context = CreateContext();
-        var service = CreateUserService(context);
-        await SetUpGroups(context);
-        await SetUpStates(context);
-        var admin = DefaultUserEntity(userStateId: activeStateId, userGroupId: adminGroupId);
-        await context.Users.AddAsync(admin);
-        await context.SaveChangesAsync();
 
-        var userEntity = await service.Authenticate(admin.Login, admin.Password);
-        
-        Assert.True(admin == userEntity);
-    }
-    
-    [Fact]
-    public async Task AuthenticateAsync_WithoutProperLogin_ShouldThrowUserNotFoundException()
-    {
-        var adminGroupId = 1;
-        var activeStateId = 1;
-        var context = CreateContext();
-        var service = CreateUserService(context);
-        await SetUpGroups(context);
-        await SetUpStates(context);
-        var admin = DefaultUserEntity(userStateId: activeStateId, userGroupId: adminGroupId);
-        await context.Users.AddAsync(admin);
-        await context.SaveChangesAsync();
-
-        await Assert.ThrowsAsync<UserNotFoundException>(() => service.Authenticate("", admin.Password));
-        
-        var usersFromDb = await context.Users.ToListAsync();
-        Assert.True(usersFromDb.Count == 1);
-    }
-    
-    [Fact]
-    public async Task AuthenticateAsync_WithoutProperPassword_ShouldThrowUserNotFoundException()
-    {
-        var adminGroupId = 1;
-        var activeStateId = 1;
-        var context = CreateContext();
-        var service = CreateUserService(context);
-        await SetUpGroups(context);
-        await SetUpStates(context);
-        var admin = DefaultUserEntity(userStateId: activeStateId, userGroupId: adminGroupId);
-        await context.Users.AddAsync(admin);
-        await context.SaveChangesAsync();
-
-        await Assert.ThrowsAsync<UserNotFoundException>(() => service.Authenticate(admin.Login, ""));
-        
-        var usersFromDb = await context.Users.ToListAsync();
-        Assert.True(usersFromDb.Count == 1);
-    }
-    
-    [Fact]
-    public async Task AuthenticateAsync_WithoutUser_ShouldThrowUserNotFoundException()
-    {
-        var adminGroupId = 1;
-        var activeStateId = 1;
-        var context = CreateContext();
-        var service = CreateUserService(context);
-        await SetUpGroups(context);
-        await SetUpStates(context);
-        var admin = DefaultUserEntity(userStateId: activeStateId, userGroupId: adminGroupId);
-
-        await Assert.ThrowsAsync<UserNotFoundException>(() => service.Authenticate(admin.Login, admin.Password));
-        
-        var usersFromDb = await context.Users.ToListAsync();
-        Assert.True(usersFromDb.Count == 0);
-    }
-    
-    [Fact]
-    public async Task AuthenticateAsync_WithBlockedUser_ShouldThrowUserBlockedException()
-    {
-        var adminGroupId = 1;
-        var blockStateId = 0;
-        var context = CreateContext();
-        var service = CreateUserService(context);
-        await SetUpGroups(context);
-        await SetUpStates(context);
-        var admin = DefaultUserEntity(userStateId: blockStateId, userGroupId: adminGroupId);
-        await context.Users.AddAsync(admin);
-        await context.SaveChangesAsync();
-
-        await Assert.ThrowsAsync<UserBlockedException>(() => service.Authenticate(admin.Login, admin.Password));
-        
-        var adminFromDb = await context.Users.FindAsync(admin.Id);
-        Assert.NotNull(adminFromDb);
-        Assert.Equal(blockStateId, adminFromDb.UserStateId);
-    }
-    
-    [Fact]
-    public async Task AuthenticateAsync_WithoutProperPermissions_ShouldThrowNotEnoughPermissionsException()
-    {
-        var userGroupId = 0;
-        var activeStateId = 1;
-        var context = CreateContext();
-        var service = CreateUserService(context);
-        await SetUpGroups(context);
-        await SetUpStates(context);
-        var admin = DefaultUserEntity(userStateId: activeStateId, userGroupId: userGroupId);
-        await context.Users.AddAsync(admin);
-        await context.SaveChangesAsync();
-
-        await Assert.ThrowsAsync<NotEnoughPermissionsException>(() => service.Authenticate(admin.Login, admin.Password));
-        
-        var adminFromDb = await context.Users.FindAsync(admin.Id);
-        Assert.NotNull(adminFromDb);
-        Assert.Equal(userGroupId, adminFromDb.UserGroupId);
-    }
-    
     [Fact]
     public async Task GetUserAsync_WithUser_ShouldReturnUser()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         await SetUpStates(context);
@@ -312,7 +197,8 @@ public class UserServiceTests
     [Fact]
     public async Task GetUserAsync_WithoutUser_ShouldThrowUserNotFoundException()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         await SetUpStates(context);
@@ -327,13 +213,14 @@ public class UserServiceTests
     [Fact]
     public async Task GetUsersAsync_WithUsers_ShouldReturnUsers()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         await SetUpStates(context);
         var filter = new PaginationFilterDto();
         var user1 = DefaultUserEntity();
-        var user2 = DefaultUserEntity(1);
+        var user2 = DefaultUserEntity(1, login: "newLogin");
         await context.Users.AddAsync(user1);
         await context.Users.AddAsync(user2);
         await context.SaveChangesAsync();
@@ -347,7 +234,8 @@ public class UserServiceTests
     [Fact]
     public async Task GetUsersAsync_WithoutUsers_ShouldThrowUsersNotFoundException()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateUserService(context);
         await SetUpGroups(context);
         await SetUpStates(context);

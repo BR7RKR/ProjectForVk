@@ -5,25 +5,17 @@ using ProjectForVk.Core.Exceptions.State;
 using ProjectForVk.Infrastructure.Database;
 using ProjectForVk.Infrastructure.Services;
 
-namespace ProjectForVk.Tests;
+namespace ProjectForVk.Tests.Services;
 
-public class StateServiceTests
+public class StateServiceTests : DatabaseTestsHelper
 {
-    private readonly DbContextOptions<ApplicationContext> _contextOptions;
-
-    public StateServiceTests()
-    {
-        _contextOptions = new DbContextOptionsBuilder<ApplicationContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-    }
-
     [Theory]
     [InlineData(StateCodeType.Active)]
     [InlineData(StateCodeType.Blocked)]
     public async Task CreateStateAsync_WithoutDuplicates_ShouldCreateState(StateCodeType codeType)
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateStateService(context);
         var state = DefaultStateEntity(code: codeType);
 
@@ -34,11 +26,12 @@ public class StateServiceTests
         Assert.NotNull(stateFromDb);
         Assert.True(state == stateFromDb);
     }
-    
+
     [Fact]
     public async Task CreateStateAsync_WithDuplicates_ShouldThrowStateAlreadyExistsException()
     {
-        var context = CreateContext();
+        await using var context = CreateContext();
+        await ClearDatabase(context);
         var service = CreateStateService(context);
         var state = DefaultStateEntity();
         var stateDuplicate = DefaultStateEntity();
@@ -46,14 +39,9 @@ public class StateServiceTests
         await context.SaveChangesAsync();
 
         await Assert.ThrowsAsync<StateAlreadyExistsException>(() => service.AddStateAsync(stateDuplicate));
-        
+
         var statesFromDb = await context.UserStates.ToListAsync();
         Assert.Single(statesFromDb);
-    }
-    
-    private ApplicationContext CreateContext()
-    {
-        return new ApplicationContext(_contextOptions);
     }
 
     private UserStateEntity DefaultStateEntity(int id = 0, StateCodeType code = StateCodeType.Blocked)
