@@ -10,7 +10,7 @@ using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
 
-internal sealed class UserService : IUserService
+public sealed class UserService : IUserService
 {
     private readonly ApplicationContext _context;
 

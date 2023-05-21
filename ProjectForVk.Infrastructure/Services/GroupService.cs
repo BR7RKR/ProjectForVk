@@ -5,7 +5,7 @@ using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
 
-internal sealed class GroupService : IGroupService
+public sealed class GroupService : IGroupService
 {
     private readonly ApplicationContext _context;
 

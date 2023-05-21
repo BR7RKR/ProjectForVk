@@ -5,7 +5,7 @@ using ProjectForVk.Infrastructure.Database;
 
 namespace ProjectForVk.Infrastructure.Services;
 
-internal sealed class StateService : IStateService
+public sealed class StateService : IStateService
 {
     private readonly ApplicationContext _context;
 

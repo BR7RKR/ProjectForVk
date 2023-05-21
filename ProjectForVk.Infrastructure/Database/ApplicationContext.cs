@@ -3,7 +3,7 @@ using ProjectForVk.Core.Entities.DB;
 
 namespace ProjectForVk.Infrastructure.Database;
 
-internal sealed class ApplicationContext : DbContext
+public sealed class ApplicationContext : DbContext
 {
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<UserGroupEntity> UserGroups { get; set; }
