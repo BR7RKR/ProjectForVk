@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="in"
+                 name="Instance Name" start-page="README.md">
+
+    <toc-element topic="README.md">
+    </toc-element>
+    <toc-element topic="API_Reference.topic">
+        <toc-element topic="api_User_BlockUser_DELETE.topic"/>
+        <toc-element topic="api_User_RegisterUser_POST.topic"/>
+        <toc-element topic="api_User_GetUsers_GET.topic"/>
+        <toc-element topic="api_User_GetUser_GET.topic"/>
+        <toc-element topic="api_State_CreateState_POST.topic"/>
+        <toc-element topic="api_Group_CreateGroup_POST.topic"/>
+    </toc-element>
+</instance-profile>

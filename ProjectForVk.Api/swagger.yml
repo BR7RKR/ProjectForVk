@@ -1,0 +1,165 @@
+openapi: 3.0.1
+info:
+  title: ProjectForVk.Api
+  version: '1.0'
+paths:
+  /api/Group/CreateGroup:
+    post:
+      tags:
+        - Group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGroupEntity'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserGroupEntity'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserGroupEntity'
+      responses:
+        '200':
+          description: Success
+  /api/State/CreateState:
+    post:
+      tags:
+        - State
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserStateEntity'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserStateEntity'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserStateEntity'
+      responses:
+        '200':
+          description: Success
+  /api/User/GetUser:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: query
+          style: form
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /api/User/GetUsers:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: PageNumber
+          in: query
+          style: form
+          schema:
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          style: form
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /api/User/RegisterUser:
+    post:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDtoEntity'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserDtoEntity'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserDtoEntity'
+      responses:
+        '200':
+          description: Success
+  /api/User/BlockUser:
+    delete:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: query
+          style: form
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    GroupCodeType:
+      enum:
+        - User
+        - Admin
+      type: string
+    StateCodeType:
+      enum:
+        - Blocked
+        - Active
+      type: string
+    UserDtoEntity:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        created_date:
+          type: string
+          format: date
+        user_group_id:
+          type: integer
+          format: int32
+        user_state_id:
+          type: integer
+          format: int32
+      additionalProperties: false
+    UserGroupEntity:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        code:
+          $ref: '#/components/schemas/GroupCodeType'
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UserStateEntity:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        code:
+          $ref: '#/components/schemas/StateCodeType'
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false

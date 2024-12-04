@@ -18,28 +18,8 @@
 ConnectionString находится в appsettings.Development.json. Туда нужно вписать строку соединения для своей бд.  
 Используется подход code first, но можно использовать подход Database first.
 
-Примеры JSON запросов:
+[Спецификация Api](API_Reference.topic)
 
-Добавление состояния {
-  "id": 0,
-  "code": "Blocked",
-  "description": "string"
-}
-
-Добавление группы {
-  "id": 0,
-  "code": "User",
-  "description": "string"
-}
-
-Добавление пользователя {
-  "id": 0,
-  "login": "string",
-  "password": "string",
-  "created_date": "2023-05-08",
-  "user_group_id": 0,
-  "user_state_id": 0
-}
 
 ## Comments
 
@@ -52,5 +32,5 @@ ConnectionString находится в appsettings.Development.json. Туда н
 Тесты: тестирование данного сервиса юнит тестами, как по мне, бессмысленно. Так как вся логика приложения основана только на работе с базой данных. В реальной ситуации я бы прибегнул к тестам другого типа.
 ## Authors
 
-- [@BR7RKR](https://github.com/BR7RKR)
+<a type="account" href="https://github.com/BR7RKR">@BR7RKR</a>
 

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="API спецификация" id="API_Reference">
+
+    <chapter title="Список эндпоинтов" id="endpoints">
+
+        <procedure title="Здесь вы можете выбрать интересующий вас эндпоинт" id="steps-sequence">
+            <step>
+                <p>GET</p>
+
+                <list>
+                    <li>
+                        <a href="api_User_GetUser_GET.topic">Get user</a>
+                    </li>
+                    <li>
+                        <a href="api_User_GetUsers_GET.topic">Get users</a>
+                    </li>
+                </list>
+            </step>
+
+            <step>
+                <p>POST</p>
+
+                <list>
+                    <li>
+                        <a href="api_User_RegisterUser_POST.topic">Register User</a>
+                    </li>
+                    <li>
+                        <a href="api_Group_CreateGroup_POST.topic">Create group</a>
+                    </li>
+                    <li>
+                        <a href="api_State_CreateState_POST.topic">Create state</a>
+                    </li>
+                </list>
+            </step>
+
+            <step>
+                <p>DELETE</p>
+
+                <list>
+                    <li>
+                        <a href="api_User_BlockUser_DELETE.topic">Block User</a>
+                    </li>
+                </list>
+            </step>
+        </procedure>
+    </chapter>
+
+    <p>
+    </p>
+</topic>
