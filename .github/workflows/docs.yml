@@ -42,7 +42,7 @@ jobs:
           draft: false
           prerelease: ${{ contains(github.ref, 'alpha') }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Upload artifact to release
         uses: softprops/action-gh-release@v2
