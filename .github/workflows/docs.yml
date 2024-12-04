@@ -2,7 +2,7 @@ name: Release docs
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "feat/test-docs-creation" ]
   workflow_dispatch:
 
 env:
