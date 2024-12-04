@@ -5,5 +5,5 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Register User POST" id="api_User_RegisterUser_POST">
 
-    <api-endpoint openapi-path="../../../ProjectForVk.Api/bin/swagger.yml" method="POST" endpoint="/api/User/RegisterUser"/>
+    <api-endpoint openapi-path="../../resources/swagger.yml" method="POST" endpoint="/api/User/RegisterUser"/>
 </topic>

@@ -5,5 +5,5 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Get Users GET" id="api_User_GetUsers_GET">
 
-    <api-endpoint openapi-path="../../../ProjectForVk.Api/bin/swagger.yml" method="GET" endpoint="/api/User/GetUsers"/>
+    <api-endpoint openapi-path="../../resources/swagger.yml" method="GET" endpoint="/api/User/GetUsers"/>
 </topic>

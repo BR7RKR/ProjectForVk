@@ -5,5 +5,5 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Create Group POST" id="api_Group_CreateGroup_POST">
 
-    <api-endpoint openapi-path="../../../ProjectForVk.Api/bin/swagger.yml" method="POST" endpoint="/api/Group/CreateGroup"/>
+    <api-endpoint openapi-path="../../resources/swagger.yml" method="POST" endpoint="/api/Group/CreateGroup"/>
 </topic>
