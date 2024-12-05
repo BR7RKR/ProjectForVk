@@ -90,6 +90,12 @@ jobs:
           
       - name: List downloaded files
         run: ls -R artifacts
+        
+      - name: Show outputs
+        run: |
+          echo "INSTANCE_ID_UPPER: ${{ needs.build.outputs.instance_id_upper }}"
+          echo "ARTIFACT: ${{ needs.build.outputs.artifact }}"
+          echo "ALGOLIA_ARTIFACT: ${{ needs.build.outputs.algolia_artifact }}"
       
       - name: Create Release
         id: create_release
