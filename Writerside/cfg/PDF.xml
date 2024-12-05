@@ -1,0 +1,11 @@
+<pdf landscape="true">
+    <cover-page>
+        <title>ProjectForVk</title>
+        <description>User Guide</description>
+        <copyright>Lev Myts Co © 2024</copyright>
+    </cover-page>
+    <header>Hello!</header>
+    <footer>I am footer!</footer>
+    <toc-title>My title!</toc-title>
+    <layout>Windows</layout>
+</pdf>
