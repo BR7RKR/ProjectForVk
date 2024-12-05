@@ -26,15 +26,15 @@ jobs:
           ARTIFACT="webHelp${INSTANCE_ID_UPPER}2-all.zip"
           ALGOLIA_ARTIFACT="algolia-indexes-${INSTANCE_ID_UPPER}.zip"
           
+          echo "INSTANCE_ID_UPPER: $INSTANCE_ID_UPPER"
+          echo "ARTIFACT: $ARTIFACT"
+          echo "ALGOLIA_ARTIFACT: $ALGOLIA_ARTIFACT"
+          
           echo "INSTANCE_ID_UPPER=$INSTANCE_ID_UPPER" >> $GITHUB_ENV
           echo "ARTIFACT=$ARTIFACT" >> $GITHUB_ENV
           echo "ALGOLIA_ARTIFACT=$ALGOLIA_ARTIFACT" >> $GITHUB_ENV
           echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
           echo "algolia_artifact=$ALGOLIA_ARTIFACT" >> $GITHUB_OUTPUT
-          
-          echo "INSTANCE_ID_UPPER: $INSTANCE_ID_UPPER"
-          echo "ARTIFACT: $ARTIFACT"
-          echo "ALGOLIA_ARTIFACT: $ALGOLIA_ARTIFACT"
 
       - name: Build Writerside docs using Docker
         uses: JetBrains/writerside-github-action@v4
