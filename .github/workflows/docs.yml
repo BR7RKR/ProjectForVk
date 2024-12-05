@@ -37,6 +37,9 @@ jobs:
           echo "instance_id_upper=$INSTANCE_ID_UPPER" >> $GITHUB_OUTPUT
           echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
           echo "algolia_artifact=$ALGOLIA_ARTIFACT" >> $GITHUB_OUTPUT
+          
+      - name: Debug output
+        run: cat $GITHUB_OUTPUT
 
       - name: Build Writerside docs using Docker in PDF
         uses: JetBrains/writerside-github-action@v4
@@ -72,6 +75,12 @@ jobs:
         with:
           name: docs
           path: artifacts
+
+      - name: Show outputs
+        run: |
+          echo "INSTANCE_ID_UPPER: ${{ needs.build.outputs.instance_id_upper }}"
+          echo "ARTIFACT: ${{ needs.build.outputs.artifact }}"
+          echo "ALGOLIA_ARTIFACT: ${{ needs.build.outputs.algolia_artifact }}"
 
       - name: Test documentation
         uses: JetBrains/writerside-checker-action@v1
