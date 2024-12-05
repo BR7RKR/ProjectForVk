@@ -11,7 +11,7 @@ env:
   PDF: 'PDF.xml'
 
 jobs:
-  build-pdf:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -72,3 +72,36 @@ jobs:
             artifacts/${{ env.ALGOLIA_ARTIFACT }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout the repository to get access to GitHub CLI
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Authenticate with GitHub API (to download release assets)
+      - name: Authenticate with GitHub API
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "Authentication successful"
+
+      # 3. Download assets from the latest release
+      - name: Download release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fetch the latest release info
+          release=$(gh release list --limit 1 | awk '{print $1}')
+          echo "Latest release: $release"
+
+          # Download all assets from the release
+          gh release download "$release" --dir artifacts
+
+      # 4. Test documentation using Writerside Checker
+      - name: Test documentation
+        uses: JetBrains/writerside-checker-action@v1
+        with:
+          instance: ${{ env.INSTANCE }}
+
