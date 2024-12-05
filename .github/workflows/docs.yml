@@ -36,13 +36,20 @@ jobs:
           echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
           echo "algolia_artifact=$ALGOLIA_ARTIFACT" >> $GITHUB_OUTPUT
 
-      - name: Build Writerside docs using Docker
+      - name: Build Writerside docs using Docker in PDF
         uses: JetBrains/writerside-github-action@v4
         with:
           instance: ${{ env.INSTANCE }}
           docker-version: ${{ env.DOCKER_VERSION }}
           artifact: ${{ env.ARTIFACT }}
           pdf: ${{ env.PDF }}
+          
+      - name: Build Writerside docs using Docker in ZIP
+        uses: JetBrains/writerside-github-action@v4
+        with:
+          instance: ${{ env.INSTANCE }}
+          docker-version: ${{ env.DOCKER_VERSION }}
+          artifact: ${{ env.ARTIFACT }}
 
       - name: Create Release
         id: create_release
