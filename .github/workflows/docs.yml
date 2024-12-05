@@ -33,6 +33,8 @@ jobs:
           echo "INSTANCE_ID_UPPER=$INSTANCE_ID_UPPER" >> $GITHUB_ENV
           echo "ARTIFACT=$ARTIFACT" >> $GITHUB_ENV
           echo "ALGOLIA_ARTIFACT=$ALGOLIA_ARTIFACT" >> $GITHUB_ENV
+          
+          echo "instance_id_upper=$INSTANCE_ID_UPPER" >> $GITHUB_OUTPUT
           echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
           echo "algolia_artifact=$ALGOLIA_ARTIFACT" >> $GITHUB_OUTPUT
 
@@ -88,9 +90,6 @@ jobs:
           
       - name: List downloaded files
         run: ls -R artifacts
-
-      - name: Unzip artifact
-        run: unzip -O UTF-8 -qq "artifacts/${{ needs.build.outputs.artifact }}" -d dir
         
       - name: check dir
         run: ls -R dir
@@ -110,9 +109,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dir/artifacts/pdfSource${{ env.INSTANCE_ID_UPPER }}.pdf
-            dir/artifacts/${{ env.ARTIFACT }}
-            dir/artifacts/report.json
-            dir/artifacts/${{ env.ALGOLIA_ARTIFACT }}
+            artifacts/pdfSource${{ needs.build.outputs.instance_id_upper }}.pdf
+            artifacts/${{ needs.build.outputs.artifact }}
+            artifacts/report.json
+            artifacts/${{ needs.build.outputs.algolia_artifact }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
