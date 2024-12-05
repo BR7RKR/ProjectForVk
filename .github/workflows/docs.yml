@@ -13,6 +13,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      instance_id_upper: ${{ steps.define-ids.outputs.instance_id_upper }}
+      algolia_artifact: ${{ steps.define-ids.outputs.algolia_artifact }}
+      artifact: ${{ steps.define-ids.outputs.artifact }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,6 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Define instance ID
+        id: define-variables
         run: |
           INSTANCE_ID="${INSTANCE#*/}"
           INSTANCE_ID_UPPER=$(echo "$INSTANCE_ID" | tr '[:lower:]' '[:upper:]')
@@ -37,9 +42,6 @@ jobs:
           echo "instance_id_upper=$INSTANCE_ID_UPPER" >> $GITHUB_OUTPUT
           echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
           echo "algolia_artifact=$ALGOLIA_ARTIFACT" >> $GITHUB_OUTPUT
-          
-      - name: Debug output
-        run: cat $GITHUB_OUTPUT
 
       - name: Build Writerside docs using Docker in PDF
         uses: JetBrains/writerside-github-action@v4
@@ -76,12 +78,6 @@ jobs:
           name: docs
           path: artifacts
 
-      - name: Show outputs
-        run: |
-          echo "INSTANCE_ID_UPPER: ${{ needs.build.outputs.instance_id_upper }}"
-          echo "ARTIFACT: ${{ needs.build.outputs.artifact }}"
-          echo "ALGOLIA_ARTIFACT: ${{ needs.build.outputs.algolia_artifact }}"
-
       - name: Test documentation
         uses: JetBrains/writerside-checker-action@v1
         with:
@@ -96,9 +92,6 @@ jobs:
         with:
           name: docs
           path: artifacts
-          
-      - name: List downloaded files
-        run: ls -R artifacts
         
       - name: Show outputs
         run: |
