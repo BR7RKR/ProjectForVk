@@ -41,7 +41,6 @@ jobs:
         with:
           instance: ${{ env.INSTANCE }}
           docker-version: ${{ env.DOCKER_VERSION }}
-          artifact: ${{ env.ARTIFACT }}
           pdf: ${{ env.PDF }}
           
       - name: Build Writerside docs using Docker in ZIP
@@ -77,31 +76,34 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout the repository to get access to GitHub CLI
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      # 2. Authenticate with GitHub API (to download release assets)
-      - name: Authenticate with GitHub API
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: echo "Authentication successful"
-
-      # 3. Download assets from the latest release
-      - name: Download release assets
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Fetch the latest release info
-          release=$(gh release list --limit 1 | awk '{print $1}')
-          echo "Latest release: $release"
-
-          # Download all assets from the release
-          gh release download "$release" --dir artifacts
-
-      # 4. Test documentation using Writerside Checker
       - name: Test documentation
         uses: JetBrains/writerside-checker-action@v1
         with:
           instance: ${{ env.INSTANCE }}
 
+  create-release:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref }}
+          name: "Release ${{ github.ref_name }}"
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifact to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/pdfSource${{ env.INSTANCE_ID_UPPER }}.pdf
+            artifacts/${{ env.ARTIFACT }}
+            artifacts/report.json
+            artifacts/${{ env.ALGOLIA_ARTIFACT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
