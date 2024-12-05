@@ -23,16 +23,27 @@ jobs:
         run: |
           INSTANCE_ID="${INSTANCE#*/}"
           INSTANCE_ID_UPPER=$(echo "$INSTANCE_ID" | tr '[:lower:]' '[:upper:]')
+          ARTIFACT="webHelp${INSTANCE_ID_UPPER}2-all.zip"
+          ALGOLIA_ARTIFACT="algolia-indexes-${INSTANCE_ID_UPPER}.zip"
+          
           echo "INSTANCE_ID_UPPER=$INSTANCE_ID_UPPER" >> $GITHUB_ENV
-          echo "Extracted ID: $INSTANCE_ID_UPPER"
+          echo "ARTIFACT=$ARTIFACT" >> $GITHUB_ENV
+          echo "ALGOLIA_ARTIFACT=$ALGOLIA_ARTIFACT" >> $GITHUB_ENV
+          echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
+          echo "algolia_artifact=$ALGOLIA_ARTIFACT" >> $GITHUB_OUTPUT
+          
+          echo "INSTANCE_ID_UPPER: $INSTANCE_ID_UPPER"
+          echo "ARTIFACT: $ARTIFACT"
+          echo "ALGOLIA_ARTIFACT: $ALGOLIA_ARTIFACT"
 
       - name: Build Writerside docs using Docker
         uses: JetBrains/writerside-github-action@v4
         with:
           instance: ${{ env.INSTANCE }}
           docker-version: ${{ env.DOCKER_VERSION }}
+          artifact: ${{ env.ARTIFACT }}
           pdf: ${{ env.PDF }}
-          
+
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
@@ -49,6 +60,8 @@ jobs:
         with:
           files: |
             artifacts/pdfSource${{ env.INSTANCE_ID_UPPER }}.pdf
-            artifacts/pdfSource${{ env.INSTANCE_ID_UPPER }}.html
+            artifacts/${{ env.ARTIFACT }}
+            artifacts/report.json
+            artifacts/${{ env.ALGOLIA_ARTIFACT }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
