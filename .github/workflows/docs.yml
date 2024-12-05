@@ -42,13 +42,6 @@ jobs:
           echo "instance_id_upper=$INSTANCE_ID_UPPER" >> $GITHUB_OUTPUT
           echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
           echo "algolia_artifact=$ALGOLIA_ARTIFACT" >> $GITHUB_OUTPUT
-
-      - name: Build Writerside docs using Docker in PDF
-        uses: JetBrains/writerside-github-action@v4
-        with:
-          instance: ${{ env.INSTANCE }}
-          docker-version: ${{ env.DOCKER_VERSION }}
-          pdf: ${{ env.PDF }}
           
       - name: Build Writerside docs using Docker in ZIP
         uses: JetBrains/writerside-github-action@v4
@@ -56,6 +49,13 @@ jobs:
           instance: ${{ env.INSTANCE }}
           docker-version: ${{ env.DOCKER_VERSION }}
           artifact: ${{ env.ARTIFACT }}
+          
+      - name: Build Writerside docs using Docker in PDF
+        uses: JetBrains/writerside-github-action@v4
+        with:
+          instance: ${{ env.INSTANCE }}
+          docker-version: ${{ env.DOCKER_VERSION }}
+          pdf: ${{ env.PDF }}
           
       - name: Save artifact with build results
         uses: actions/upload-artifact@v4
@@ -66,7 +66,7 @@ jobs:
             artifacts/${{ env.ARTIFACT }}
             artifacts/report.json
             artifacts/${{ env.ALGOLIA_ARTIFACT }}
-          retention-days: 2
+          retention-days: 1
   
   test:
     needs: build
