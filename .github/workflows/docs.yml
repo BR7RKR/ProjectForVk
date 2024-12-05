@@ -85,6 +85,15 @@ jobs:
         with:
           name: docs
           path: artifacts
+          
+      - name: List downloaded files
+        run: ls -R artifacts
+
+      - name: Unzip artifact
+        run: unzip -O UTF-8 -qq "artifacts/${{ needs.build.outputs.artifact }}" -d dir
+        
+      - name: check dir
+        run: ls -R dir
       
       - name: Create Release
         id: create_release
@@ -101,9 +110,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/pdfSource${{ env.INSTANCE_ID_UPPER }}.pdf
-            artifacts/${{ env.ARTIFACT }}
-            artifacts/report.json
-            artifacts/${{ env.ALGOLIA_ARTIFACT }}
+            dir/artifacts/pdfSource${{ env.INSTANCE_ID_UPPER }}.pdf
+            dir/artifacts/${{ env.ARTIFACT }}
+            dir/artifacts/report.json
+            dir/artifacts/${{ env.ALGOLIA_ARTIFACT }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
