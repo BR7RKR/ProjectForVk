@@ -15,7 +15,9 @@
 
 Настройка бд:
 
-ConnectionString находится в appsettings.Development.json. Туда нужно вписать строку соединения для своей бд.  
+ConnectionString находится в 
+<code>appsettings.Development.json</code>.
+Туда нужно вписать строку соединения для своей бд.  
 Используется подход code first, но можно использовать подход Database first.
 
 [Спецификация Api](API_Reference.topic)
