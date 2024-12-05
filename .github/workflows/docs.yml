@@ -90,9 +90,6 @@ jobs:
           
       - name: List downloaded files
         run: ls -R artifacts
-        
-      - name: check dir
-        run: ls -R dir
       
       - name: Create Release
         id: create_release
