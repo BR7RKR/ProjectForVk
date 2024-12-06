@@ -3,12 +3,14 @@
 <buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <variables></variables>
+    <variables> </variables>
     <build-profile instance="in">
         <variables>
             <noindex-content>true</noindex-content>
+            <versions-switcher>
+                https://github.com/BR7RKR/ProjectForVk/blob/docs/version-2.0/Writerside/cfg/help-versions.json
+            </versions-switcher>
         </variables>
-        <versions-switcher>https://my.company.resources.com/help-versions.json</versions-switcher>
     </build-profile>
 
 </buildprofiles>
