@@ -36,3 +36,7 @@ ConnectionString находится в
 
 <a type="account" href="https://github.com/BR7RKR">@BR7RKR</a>
 
+## Version
+
+Version = 2.0
+
