@@ -8,6 +8,7 @@
         <variables>
             <noindex-content>true</noindex-content>
         </variables>
+        <versions-switcher>https://my.company.resources.com/help-versions.json</versions-switcher>
     </build-profile>
 
 </buildprofiles>

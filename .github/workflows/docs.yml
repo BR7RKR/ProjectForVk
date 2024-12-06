@@ -88,49 +88,49 @@ jobs:
         with:
           instance: ${{ env.INSTANCE }}
 
-  create-release:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: docs
-          path: artifacts
-        
-      - name: Show outputs
-        run: |
-          echo "INSTANCE_ID_UPPER: ${{ needs.build.outputs.instance_id_upper }}"
-          echo "ARTIFACT: ${{ needs.build.outputs.artifact }}"
-          echo "ALGOLIA_ARTIFACT: ${{ needs.build.outputs.algolia_artifact }}"
-      
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref }}
-          name: "Release ${{ github.ref_name }}"
-          draft: false
-          prerelease: ${{ contains(github.ref, 'alpha') }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#  create-release: TODO: ignore for test purposes
+#    needs: [build, test]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: docs
+#          path: artifacts
+#        
+#      - name: Show outputs
+#        run: |
+#          echo "INSTANCE_ID_UPPER: ${{ needs.build.outputs.instance_id_upper }}"
+#          echo "ARTIFACT: ${{ needs.build.outputs.artifact }}"
+#          echo "ALGOLIA_ARTIFACT: ${{ needs.build.outputs.algolia_artifact }}"
+#      
+#      - name: Create Release
+#        id: create_release
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          tag_name: ${{ github.ref }}
+#          name: "Release ${{ github.ref_name }}"
+#          draft: false
+#          prerelease: ${{ contains(github.ref, 'alpha') }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Upload artifact to release
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          files: |
+#            artifacts/pdfSource${{ needs.build.outputs.instance_id_upper }}.pdf
+#            artifacts/${{ needs.build.outputs.artifact }}
+#            artifacts/report.json
+#            artifacts/${{ needs.build.outputs.algolia_artifact }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload artifact to release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            artifacts/pdfSource${{ needs.build.outputs.instance_id_upper }}.pdf
-            artifacts/${{ needs.build.outputs.artifact }}
-            artifacts/report.json
-            artifacts/${{ needs.build.outputs.algolia_artifact }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: [ build, test, create-release ]
+    needs: [ build, test]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
