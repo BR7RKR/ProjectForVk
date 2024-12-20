@@ -7,7 +7,7 @@
     <build-profile instance="in">
         <variables>
             <algolia-id>${ALGOLIA_ID}</algolia-id>
-            <algolia-index>projectforvk_index</algolia-index>
+            <algolia-index>asv.mavlink</algolia-index>
             <algolia-api-key>${ALGOLIA_KEY}</algolia-api-key>
             <algolia-show-logo>true</algolia-show-logo>
             <noindex-content>false</noindex-content>

@@ -15,7 +15,7 @@ env:
   DOCKER_VERSION: '243.21565'
   PDF: 'PDF.xml'
   CONFIG_JSON_PRODUCT: 'IN'
-  ALGOLIA_INDEX_NAME: 'projectforvk_index'
+  ALGOLIA_INDEX_NAME: 'asv.mavlink'
 
 jobs:
   build:
