@@ -6,9 +6,9 @@
     <variables></variables>
     <build-profile instance="in">
         <variables>
-            <algolia-id>${ALGOLIA_ID}</algolia-id>
+            <algolia-id>K0FKJO7LVC</algolia-id>
             <algolia-index>asv.mavlink</algolia-index>
-            <algolia-api-key>${ALGOLIA_SEARCH_KEY}</algolia-api-key>
+            <algolia-api-key>b3f76bcd17c488bfd52a3b512cc94923</algolia-api-key>
             <algolia-show-logo>true</algolia-show-logo>
             <noindex-content>false</noindex-content>
         </variables>
