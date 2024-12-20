@@ -8,7 +8,7 @@
         <variables>
             <algolia-id>${ALGOLIA_ID}</algolia-id>
             <algolia-index>asv.mavlink</algolia-index>
-            <algolia-api-key>${ALGOLIA_KEY}</algolia-api-key>
+            <algolia-api-key>${ALGOLIA_SEARCH_KEY}</algolia-api-key>
             <algolia-show-logo>true</algolia-show-logo>
             <noindex-content>false</noindex-content>
         </variables>
