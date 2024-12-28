@@ -5,6 +5,8 @@ import pdf from "astro-pdf";
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://br7rkr.github.io',
+	base: '/ProjectForVk',
 	integrations: [
 		starlight({
 			title: {
