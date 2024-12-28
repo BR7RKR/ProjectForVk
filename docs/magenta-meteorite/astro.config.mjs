@@ -20,7 +20,7 @@ export default defineConfig({
 					lang: 'en',
 				},
 				ru: {
-					label: 'Русская',
+					label: 'Русский',
 				},
 			},
 			sidebar: [
