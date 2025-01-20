@@ -37,14 +37,15 @@ jobs:
   pdf:
     needs: deploy
     runs-on: ubuntu-latest
+    container:
+      image: node:20-bullseye
     steps:
       - name: Wait
         run: sleep 30
 
       - name: Install dependencies
         run: |
-          apt-get update
-          apt-get install -y chromium chromium-sandbox
+          apt-get update && apt-get install -y chromium chromium-sandbox --no-install-recommends
           npm install -g starlight-to-pdf
 
       - name: Generate PDF
