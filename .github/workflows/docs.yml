@@ -49,7 +49,9 @@ jobs:
           npm install -g starlight-to-pdf
 
       - name: Generate PDF
-        run: npx starlight-to-pdf -- "--no-sandbox" https://br7rkr.github.io/ProjectForVk
+        run: |
+          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+          npx starlight-to-pdf https://br7rkr.github.io/ProjectForVk -- --no-sandbox --disable-setuid-sandbox
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
