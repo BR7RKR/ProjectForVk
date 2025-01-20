@@ -34,50 +34,50 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  pdf:
-    needs: deploy
-    runs-on: ubuntu-latest
-    container:
-      image: node:20-bullseye
-    steps:
-      - name: Wait
-        run: sleep 30
-
-      - name: Install dependencies
-        run: |
-          apt-get update && apt-get install -y chromium chromium-sandbox --no-install-recommends
-          npm install -g starlight-to-pdf
-
-      - name: Generate PDF
-        run: |
-          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-          npx starlight-to-pdf https://br7rkr.github.io/ProjectForVk -- --no-sandbox --disable-setuid-sandbox
-
-      - name: Upload PDF artifact
-        uses: actions/upload-artifact@v4
-        with:
-            name: documentation-pdf
-            path: output.pdf
-
-  create-release:
-    needs: pdf
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: documentation-pdf
-          path: ./
-
-      - name: Create Release
-        id: create_releasef
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref }}
-          name: "Release ${{ github.ref_name }}"
-          draft: false
-          prerelease: ${{ contains(github.ref, 'alpha') }}
-          files: |
-            output.pdf
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#  pdf:
+#    needs: deploy
+#    runs-on: ubuntu-latest
+#    container:
+#      image: node:20-bullseye
+#    steps:
+#      - name: Wait
+#        run: sleep 30
+#
+#      - name: Install dependencies
+#        run: |
+#          apt-get update && apt-get install -y chromium chromium-sandbox --no-install-recommends
+#          npm install -g starlight-to-pdf
+#
+#      - name: Generate PDF
+#        run: |
+#          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+#          npx starlight-to-pdf https://br7rkr.github.io/ProjectForVk -- --no-sandbox --disable-setuid-sandbox
+#
+#      - name: Upload PDF artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#            name: documentation-pdf
+#            path: output.pdf
+#
+#  create-release:
+#    needs: pdf
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: documentation-pdf
+#          path: ./
+#
+#      - name: Create Release
+#        id: create_releasef
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          tag_name: ${{ github.ref }}
+#          name: "Release ${{ github.ref_name }}"
+#          draft: false
+#          prerelease: ${{ contains(github.ref, 'alpha') }}
+#          files: |
+#            output.pdf
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
