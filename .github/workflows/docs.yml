@@ -42,10 +42,13 @@ jobs:
         run: sleep 30
 
       - name: Install dependencies
-        run: npm install -g starlight-to-pdf
+        run: |
+          apt-get update
+          apt-get install -y chromium chromium-sandbox
+          npm install -g starlight-to-pdf
 
       - name: Generate PDF
-        run: npx starlight-to-pdf https://br7rkr.github.io/ProjectForVk
+        run: npx starlight-to-pdf --no-sandbox https://br7rkr.github.io/ProjectForVk
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
@@ -64,7 +67,7 @@ jobs:
           path: ./
 
       - name: Create Release
-        id: create_release
+        id: create_releasef
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
