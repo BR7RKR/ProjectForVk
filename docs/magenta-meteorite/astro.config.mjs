@@ -22,9 +22,6 @@ export default defineConfig({
 					label: 'Русский',
 				},
 			},
-			sidebar: [
-				{ slug: 'index' },
-			],
 		}),
 	],
 });
