@@ -33,3 +33,45 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  pdf:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait
+        run: sleep 30
+
+      - name: Install dependencies
+        run: npm install -g starlight-to-pdf
+
+      - name: Generate PDF
+        run: npx starlight-to-pdf https://br7rkr.github.io/ProjectForVk
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v2
+        with:
+            name: documentation-pdf
+            path: output.pdf
+
+  create-release:
+    needs: pdf
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation-pdf
+          path: ./
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref }}
+          name: "Release ${{ github.ref_name }}"
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') }}
+          files: |
+            output.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
